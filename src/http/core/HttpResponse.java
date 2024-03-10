@@ -16,4 +16,6 @@ public abstract class HttpResponse {
     public abstract int getStatusCode();
     public abstract String getBody();
     public abstract boolean isSuccessfull();
+    public abstract String getHeader(String name);
+    public abstract Map<String, String> getAllHeaders();
 }

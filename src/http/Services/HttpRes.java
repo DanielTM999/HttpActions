@@ -28,5 +28,15 @@ public class HttpRes extends HttpResponse{
         }
         return false;
     }
+
+    @Override
+    public String getHeader(String name) {
+        return header.get(name);
+    }
+
+    @Override
+    public Map<String, String> getAllHeaders() {
+        return header;
+    }
     
 }
