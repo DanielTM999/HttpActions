@@ -140,10 +140,34 @@ public class HttpReq implements HttpRequest{
             outputStream.writeBytes(body);
             outputStream.flush();
             outputStream.close();
-        }else if(multPartform && method != HttpMethod.GET){
+        }else if(multPartform && method != HttpMethod.GET && form != null){
             String boundary = "*****";
             connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
             connection.setDoOutput(true);
+
+            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+
+            if(form != null && !form.getTextData().isEmpty()){
+                for(Map.Entry<String, String> entry : form.getTextData().entrySet()){
+                    outputStream.writeBytes("--" + boundary + "\r\n");
+                    outputStream.writeBytes("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"\r\n\r\n");
+                    outputStream.writeBytes(entry.getValue() + "\r\n");
+                }
+            }
+
+            if(form != null && !form.getFileData().isEmpty()){
+                for(Map.Entry<String, byte[]> entry : form.getFileData().entrySet()){
+                    outputStream.writeBytes("--" + boundary + "\r\n");
+                    outputStream.writeBytes("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"; filename=\"" + entry.getKey() + "\"\r\n");
+                    outputStream.writeBytes("Content-Type: application/octet-stream\r\n\r\n");
+                    outputStream.write(entry.getValue());
+                    outputStream.writeBytes("\r\n");
+                }
+            }
+
+            outputStream.writeBytes("--" + boundary + "--\r\n");
+            outputStream.flush();
+            outputStream.close();
         }
 
         return connection;

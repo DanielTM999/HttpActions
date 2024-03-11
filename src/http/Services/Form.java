@@ -26,5 +26,15 @@ public class Form implements FormData{
         return this;
     }
 
+    @Override
+    public Map<String, byte[]> getFileData() {
+        return files;
+    }
+
+    @Override
+    public Map<String, String> getTextData() {
+        return text;
+    }
+
     
 }
