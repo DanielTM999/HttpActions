@@ -51,7 +51,7 @@ A classe abstrata `HttpResponse` representa a resposta recebida após o envio de
 
 - `getStatusCode()`: Retorna o código de status HTTP da resposta.
 - `getBody()`: Retorna o corpo da resposta.
-- `isSuccessful()`: Retorna verdadeiro se a resposta indicar sucesso (código de status 2xx).
+- `isSuccessfull()`: Retorna verdadeiro se a resposta indicar sucesso (código de status 2xx).
 - `getHeader(String name)`: Retorna o valor do cabeçalho especificado.
 - `getAllHeaders()`: Retorna todos os cabeçalhos da resposta em um mapa.
 
