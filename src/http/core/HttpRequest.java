@@ -10,6 +10,8 @@ public interface HttpRequest {
     HttpRequest httpMethod(HttpMethod method);
     HttpRequest headers(Map<String,String> headers);
     HttpRequest body(String body);
+    HttpRequest formData(FormConfig formConfig);
     HttpRequest json();
+    HttpRequest multPartform();
     HttpResponse send() throws Exception;
 }

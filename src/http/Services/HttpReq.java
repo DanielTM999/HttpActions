@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import http.Services.factoty.HttpResFactory;
+import http.core.FormConfig;
+import http.core.FormData;
 import http.core.HttpRequest;
 import http.core.HttpResponse;
 import http.core.ResponseFactoy;
@@ -22,6 +24,8 @@ public class HttpReq implements HttpRequest{
     private Map<String,String> headers;
     private String body;
     private boolean json;
+    private boolean multPartform;
+    private FormData form;
     private ResponseFactoy responseFactoy;
 
     public HttpReq(){
@@ -73,6 +77,19 @@ public class HttpReq implements HttpRequest{
     }
 
     @Override
+    public HttpRequest multPartform(){
+        this.multPartform = true;
+        return this;
+    }
+
+    @Override
+    public HttpRequest formData(FormConfig formConfig){
+        form = new Form();
+        formConfig.form(form);
+        return this;
+    }
+
+    @Override
     public HttpResponse send() throws Exception{
         url = prepareUrl(endpoint);
         validate();
@@ -116,15 +133,17 @@ public class HttpReq implements HttpRequest{
     }
 
     private HttpURLConnection ConfigureBody(HttpURLConnection connection) throws Exception{
-        if(body != null && !body.isEmpty() && method != HttpMethod.GET){
-            if(json){
-                connection.setRequestProperty("Content-Type", "application/json");
-            }
+        if(body != null && !body.isEmpty() && method != HttpMethod.GET && json){
+            connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
             DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
             outputStream.writeBytes(body);
             outputStream.flush();
             outputStream.close();
+        }else if(multPartform && method != HttpMethod.GET){
+            String boundary = "*****";
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            connection.setDoOutput(true);
         }
 
         return connection;

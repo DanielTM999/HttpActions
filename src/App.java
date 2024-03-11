@@ -11,7 +11,7 @@ public class App {
             .httpMethod(HttpMethod.GET)
             .send();
 
-        System.out.println(response.getHeader("Server"));
+        System.out.println(response.getBody());
 
     }
 }
